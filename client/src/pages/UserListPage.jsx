@@ -12,14 +12,6 @@ const UserListPage = () => {
     const navigate = useNavigate();
     const { userInfo } = useContext(ShopContext);
 
-    useEffect(() => {
-        if (userInfo && userInfo.isAdmin) {
-            fetchUsers();
-        } else {
-            navigate('/login');
-        }
-    }, [userInfo, navigate]);
-
     const fetchUsers = async () => {
         try {
             const config = {
@@ -35,6 +27,14 @@ const UserListPage = () => {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        if (userInfo && userInfo.isAdmin) {
+            fetchUsers();
+        } else {
+            navigate('/login');
+        }
+    }, [userInfo, navigate]);
 
     const deleteHandler = async (id) => {
         if (window.confirm('Are you sure you want to delete this user?')) {

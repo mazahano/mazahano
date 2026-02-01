@@ -11,14 +11,6 @@ const OrderListPage = () => {
     const navigate = useNavigate();
     const { userInfo } = useContext(ShopContext);
 
-    useEffect(() => {
-        if (userInfo && userInfo.isAdmin) {
-            fetchOrders();
-        } else {
-            navigate('/login');
-        }
-    }, [userInfo, navigate]);
-
     const fetchOrders = async () => {
         try {
             const config = {
@@ -34,6 +26,14 @@ const OrderListPage = () => {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        if (userInfo && userInfo.isAdmin) {
+            fetchOrders();
+        } else {
+            navigate('/login');
+        }
+    }, [userInfo, navigate]);
 
     return (
         <div className="container" style={{ padding: '2rem 20px' }}>

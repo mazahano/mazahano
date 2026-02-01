@@ -12,14 +12,6 @@ const ProductListPage = () => {
     const navigate = useNavigate();
     const { userInfo } = useContext(ShopContext);
 
-    useEffect(() => {
-        if (userInfo && userInfo.isAdmin) {
-            fetchProducts();
-        } else {
-            navigate('/login');
-        }
-    }, [userInfo, navigate]);
-
     const fetchProducts = async () => {
         try {
             const { data } = await axios.get('/api/products');
@@ -30,6 +22,14 @@ const ProductListPage = () => {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        if (userInfo && userInfo.isAdmin) {
+            fetchProducts();
+        } else {
+            navigate('/login');
+        }
+    }, [userInfo, navigate]);
 
     const deleteHandler = async (id) => {
         if (window.confirm('Are you sure you want to delete this product?')) {

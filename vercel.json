@@ -1,12 +1,14 @@
 {
-    "framework": "vite",
-    "rootDirectory": "client",
-    "buildCommand": "npm run build",
-    "outputDirectory": "dist",
+    "buildCommand": "npm install --prefix client && npm run build --prefix client",
+    "outputDirectory": "client/dist",
     "rewrites": [
         {
             "source": "/api/(.*)",
             "destination": "/api/$1"
+        },
+        {
+            "source": "/uploads/(.*)",
+            "destination": "/uploads/$1"
         },
         {
             "source": "/(.*)",
