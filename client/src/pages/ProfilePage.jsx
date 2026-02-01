@@ -20,10 +20,10 @@ const ProfilePage = () => {
         if (!userInfo) {
             navigate('/login');
         } else {
-            setName(userInfo.name);
-            setEmail(userInfo.email);
+            if (name !== userInfo.name) setName(userInfo.name);
+            if (email !== userInfo.email) setEmail(userInfo.email);
         }
-    }, [navigate, userInfo]);
+    }, [navigate, userInfo, name, email]);
 
     const submitHandler = async (e) => {
         e.preventDefault();
