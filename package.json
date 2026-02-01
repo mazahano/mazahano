@@ -1,0 +1,19 @@
+{
+  "name": "antig",
+  "version": "1.0.0",
+  "description": "Full-stack MERN application for MAZAHANO - a premium streetwear fashion brand.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "npm run dev --prefix server",
+    "client": "npm run dev --prefix client",
+    "data:import": "npm run data:import --prefix server"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
