@@ -1,20 +1,18 @@
 {
     "version": 2,
-    "buildCommand": "npm install --prefix client && npm run build --prefix client",
+    "buildCommand": "cd client && npm install && npm run build",
     "outputDirectory": "client/dist",
-    "framework": "vite",
     "rewrites": [
         {
             "source": "/api/(.*)",
-            "destination": "/api/$1"
-        },
-        {
-            "source": "/uploads/(.*)",
-            "destination": "/uploads/$1"
+            "destination": "/api/index.js"
         },
         {
             "source": "/(.*)",
             "destination": "/index.html"
         }
-    ]
+    ],
+    "env": {
+        "NODE_ENV": "production"
+    }
 }
