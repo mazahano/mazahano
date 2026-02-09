@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { ShopContext } from '../context/ShopContext';
+import AdminNav from '../components/AdminNav';
+import { FaTimes } from 'react-icons/fa';
 
 const OrderListPage = () => {
     const [orders, setOrders] = useState([]);
@@ -36,53 +38,65 @@ const OrderListPage = () => {
     }, [userInfo, navigate]);
 
     return (
-        <div className="container" style={{ padding: '2rem 20px' }}>
-            <h1>Orders</h1>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+        <div className="admin-container">
+            <h1 className="mb-4">Admin Dashboard</h1>
+            <AdminNav />
+
+            <div className="admin-header">
+                <h2>All Orders</h2>
+            </div>
+
+            {error && <div className="status-badge status-danger mb-2">{error}</div>}
+
             {loading ? (
-                <p>Loading...</p>
+                <p>Loading orders...</p>
             ) : (
-                <div style={{ overflowX: 'auto' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '1rem' }}>
+                <div className="admin-table-wrapper">
+                    <table className="admin-table">
                         <thead>
-                            <tr style={{ borderBottom: '1px solid #ddd', textAlign: 'left' }}>
-                                <th style={{ padding: '12px' }}>ID</th>
-                                <th style={{ padding: '12px' }}>USER</th>
-                                <th style={{ padding: '12px' }}>DATE</th>
-                                <th style={{ padding: '12px' }}>TOTAL</th>
-                                <th style={{ padding: '12px' }}>PAID</th>
-                                <th style={{ padding: '12px' }}>DELIVERED</th>
-                                <th style={{ padding: '12px' }}>ACTIONS</th>
+                            <tr>
+                                <th>ID</th>
+                                <th>USER</th>
+                                <th>DATE</th>
+                                <th>TOTAL</th>
+                                <th>PAID</th>
+                                <th>DELIVERED</th>
+                                <th>ACTIONS</th>
                             </tr>
                         </thead>
                         <tbody>
                             {orders.map((order) => (
-                                <tr key={order._id} style={{ borderBottom: '1px solid #eee' }}>
-                                    <td style={{ padding: '12px' }}>{order._id}</td>
-                                    <td style={{ padding: '12px' }}>{order.user && order.user.name}</td>
-                                    <td style={{ padding: '12px' }}>{order.createdAt.substring(0, 10)}</td>
-                                    <td style={{ padding: '12px' }}>${order.totalPrice}</td>
-                                    <td style={{ padding: '12px' }}>
+                                <tr key={order._id}>
+                                    <td>{order._id}</td>
+                                    <td>{order.user && order.user.name}</td>
+                                    <td>{order.createdAt.substring(0, 10)}</td>
+                                    <td>${order.totalPrice}</td>
+                                    <td>
                                         {order.isPaid ? (
-                                            order.paidAt.substring(0, 10)
+                                            <span className="status-badge status-success">
+                                                {order.paidAt.substring(0, 10)}
+                                            </span>
                                         ) : (
-                                            <span style={{ color: 'red' }}>No</span>
+                                            <span className="status-badge status-danger">
+                                                <FaTimes style={{ marginRight: '4px' }} /> Not Paid
+                                            </span>
                                         )}
                                     </td>
-                                    <td style={{ padding: '12px' }}>
+                                    <td>
                                         {order.isDelivered ? (
-                                            order.deliveredAt.substring(0, 10)
+                                            <span className="status-badge status-success">
+                                                {order.deliveredAt.substring(0, 10)}
+                                            </span>
                                         ) : (
-                                            <span style={{ color: 'red' }}>No</span>
+                                            <span className="status-badge status-danger">
+                                                <FaTimes style={{ marginRight: '4px' }} /> Pending
+                                            </span>
                                         )}
                                     </td>
-                                    <td style={{ padding: '12px' }}>
-                                        <button
-                                            onClick={() => navigate(`/order/${order._id}`)}
-                                            style={{ padding: '5px 10px', cursor: 'pointer' }}
-                                        >
+                                    <td>
+                                        <Link to={`/order/${order._id}`} className="action-btn">
                                             Details
-                                        </button>
+                                        </Link>
                                     </td>
                                 </tr>
                             ))}

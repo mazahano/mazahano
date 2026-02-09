@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { ShopContext } from '../context/ShopContext';
+import AdminNav from '../components/AdminNav';
+import { FaTrash, FaEdit, FaCheck, FaTimes } from 'react-icons/fa';
 
 const UserListPage = () => {
     const [users, setUsers] = useState([]);
@@ -12,7 +14,7 @@ const UserListPage = () => {
     const navigate = useNavigate();
     const { userInfo } = useContext(ShopContext);
 
-    const fetchUsers = async () => {
+    const fetchUsers = React.useCallback(async () => {
         try {
             const config = {
                 headers: {
@@ -26,7 +28,7 @@ const UserListPage = () => {
             setError(err.response && err.response.data.message ? err.response.data.message : err.message);
             setLoading(false);
         }
-    };
+    }, [userInfo, setError, setUsers, setLoading]);
 
     useEffect(() => {
         if (userInfo && userInfo.isAdmin) {
@@ -34,7 +36,7 @@ const UserListPage = () => {
         } else {
             navigate('/login');
         }
-    }, [userInfo, navigate]);
+    }, [userInfo, navigate, fetchUsers]);
 
     const deleteHandler = async (id) => {
         if (window.confirm('Are you sure you want to delete this user?')) {
@@ -54,51 +56,55 @@ const UserListPage = () => {
     };
 
     return (
-        <div className="container" style={{ padding: '2rem 20px' }}>
-            <h1>Users</h1>
-            {message && <p style={{ color: 'green' }}>{message}</p>}
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+        <div className="admin-container">
+            <h1 className="mb-4">Admin Dashboard</h1>
+            <AdminNav />
+
+            <div className="admin-header">
+                <h2>User Management</h2>
+            </div>
+
+            {message && <div className="status-badge status-success mb-2">{message}</div>}
+            {error && <div className="status-badge status-danger mb-2">{error}</div>}
+
             {loading ? (
-                <p>Loading...</p>
+                <p>Loading users...</p>
             ) : (
-                <div style={{ overflowX: 'auto' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '1rem' }}>
+                <div className="admin-table-wrapper">
+                    <table className="admin-table">
                         <thead>
-                            <tr style={{ borderBottom: '1px solid #ddd', textAlign: 'left' }}>
-                                <th style={{ padding: '12px' }}>ID</th>
-                                <th style={{ padding: '12px' }}>NAME</th>
-                                <th style={{ padding: '12px' }}>EMAIL</th>
-                                <th style={{ padding: '12px' }}>ADMIN</th>
-                                <th style={{ padding: '12px' }}>ACTIONS</th>
+                            <tr>
+                                <th>ID</th>
+                                <th>NAME</th>
+                                <th>EMAIL</th>
+                                <th>ADMIN</th>
+                                <th>ACTIONS</th>
                             </tr>
                         </thead>
                         <tbody>
                             {users.map((user) => (
-                                <tr key={user._id} style={{ borderBottom: '1px solid #eee' }}>
-                                    <td style={{ padding: '12px' }}>{user._id}</td>
-                                    <td style={{ padding: '12px' }}>{user.name}</td>
-                                    <td style={{ padding: '12px' }}>
-                                        <a href={`mailto:${user.email}`}>{user.email}</a>
+                                <tr key={user._id}>
+                                    <td>{user._id.substring(0, 10)}...</td>
+                                    <td style={{ fontWeight: '500' }}>{user.name}</td>
+                                    <td>
+                                        <a href={`mailto:${user.email}`} style={{ color: 'var(--color-gray-800)' }}>{user.email}</a>
                                     </td>
-                                    <td style={{ padding: '12px' }}>
+                                    <td>
                                         {user.isAdmin ? (
-                                            <span style={{ color: 'green' }}>Yes</span>
+                                            <span className="status-badge status-success"><FaCheck /> Admin</span>
                                         ) : (
-                                            <span style={{ color: 'red' }}>No</span>
+                                            <span className="status-badge status-danger"><FaTimes /> User</span>
                                         )}
                                     </td>
-                                    <td style={{ padding: '12px' }}>
-                                        <button
-                                            onClick={() => navigate(`/admin/user/${user._id}/edit`)}
-                                            style={{ marginRight: '10px', padding: '5px 10px', cursor: 'pointer' }}
-                                        >
-                                            Edit
-                                        </button>
+                                    <td>
+                                        <Link to={`/admin/user/${user._id}/edit`} className="action-btn">
+                                            <FaEdit />
+                                        </Link>
                                         <button
                                             onClick={() => deleteHandler(user._id)}
-                                            style={{ padding: '5px 10px', color: 'red', cursor: 'pointer' }}
+                                            className="action-btn delete"
                                         >
-                                            Delete
+                                            <FaTrash />
                                         </button>
                                     </td>
                                 </tr>

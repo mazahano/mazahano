@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { ShopContext } from '../context/ShopContext';
+import { FaArrowLeft } from 'react-icons/fa';
 
 const ProductEditPage = () => {
     const { id: productId } = useParams();
@@ -101,16 +102,21 @@ const ProductEditPage = () => {
     };
 
     return (
-        <div className="container" style={{ padding: '2rem 20px', maxWidth: '600px' }}>
-            <Link to="/admin/productlist">Go Back</Link>
-            <h1>Edit Product</h1>
+        <div className="admin-form-container">
+            <Link to="/admin/productlist" className="back-link">
+                <FaArrowLeft style={{ marginRight: '8px' }} /> GO BACK
+            </Link>
+
+            <h1 className="admin-form-title">Edit Product</h1>
+
             {loading ? (
                 <p>Loading...</p>
             ) : error ? (
                 <p style={{ color: 'red' }}>{error}</p>
             ) : (
                 <form onSubmit={submitHandler}>
-                    {updateError && <p style={{ color: 'red' }}>{updateError}</p>}
+                    {updateError && <p style={{ color: 'red', marginBottom: '1rem' }}>{updateError}</p>}
+
                     <div className="form-group">
                         <label className="form-label">Name</label>
                         <input
@@ -120,58 +126,67 @@ const ProductEditPage = () => {
                             onChange={(e) => setName(e.target.value)}
                         />
                     </div>
-                    <div className="form-group">
-                        <label className="form-label">Price</label>
-                        <input
-                            type="number"
-                            className="form-control"
-                            value={price}
-                            onChange={(e) => setPrice(e.target.value)}
-                        />
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                        <div className="form-group">
+                            <label className="form-label">Price</label>
+                            <input
+                                type="number"
+                                className="form-control"
+                                value={price}
+                                onChange={(e) => setPrice(e.target.value)}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">Count In Stock</label>
+                            <input
+                                type="number"
+                                className="form-control"
+                                value={countInStock}
+                                onChange={(e) => setCountInStock(e.target.value)}
+                            />
+                        </div>
                     </div>
+
                     <div className="form-group">
-                        <label className="form-label">Image URL</label>
+                        <label className="form-label">Image</label>
                         <input
                             type="text"
                             className="form-control"
                             value={image}
                             onChange={(e) => setImage(e.target.value)}
+                            style={{ marginBottom: '10px' }}
                         />
-                        <input
-                            type="file"
-                            className="form-control"
-                            onChange={uploadFileHandler}
-                            style={{ marginTop: '10px' }}
-                        />
-                        {uploading && <p>Uploading...</p>}
+                        <div className="file-upload-wrapper">
+                            <input
+                                type="file"
+                                onChange={uploadFileHandler}
+                            />
+                            {uploading && <p style={{ marginTop: '10px', fontSize: '0.9rem' }}>Uploading...</p>}
+                        </div>
                     </div>
-                    <div className="form-group">
-                        <label className="form-label">Brand</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            value={brand}
-                            onChange={(e) => setBrand(e.target.value)}
-                        />
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                        <div className="form-group">
+                            <label className="form-label">Brand</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={brand}
+                                onChange={(e) => setBrand(e.target.value)}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">Category</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={category}
+                                onChange={(e) => setCategory(e.target.value)}
+                            />
+                        </div>
                     </div>
-                    <div className="form-group">
-                        <label className="form-label">Count In Stock</label>
-                        <input
-                            type="number"
-                            className="form-control"
-                            value={countInStock}
-                            onChange={(e) => setCountInStock(e.target.value)}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label className="form-label">Category</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            value={category}
-                            onChange={(e) => setCategory(e.target.value)}
-                        />
-                    </div>
+
                     <div className="form-group">
                         <label className="form-label">Description</label>
                         <textarea
@@ -179,11 +194,11 @@ const ProductEditPage = () => {
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                             rows="5"
-                            style={{ width: '100%', padding: '10px' }}
                         ></textarea>
                     </div>
-                    <button type="submit" className="btn" disabled={updateLoading}>
-                        {updateLoading ? 'UPDATING...' : 'UPDATE'}
+
+                    <button type="submit" className="btn btn-black" style={{ width: '100%', marginTop: '1rem' }} disabled={updateLoading}>
+                        {updateLoading ? 'SAVING...' : 'SAVE CHANGES'}
                     </button>
                 </form>
             )}

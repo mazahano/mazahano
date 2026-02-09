@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { ShopContext } from '../context/ShopContext';
+import AdminNav from '../components/AdminNav';
+import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
 
 const ProductListPage = () => {
     const [products, setProducts] = useState([]);
@@ -12,16 +14,16 @@ const ProductListPage = () => {
     const navigate = useNavigate();
     const { userInfo } = useContext(ShopContext);
 
-    const fetchProducts = async () => {
+    const fetchProducts = React.useCallback(async () => {
         try {
             const { data } = await axios.get('/api/products');
-            setProducts(data.products); // UPDATED: Handle paginated response
+            setProducts(data.products);
             setLoading(false);
         } catch (err) {
             setError(err.response && err.response.data.message ? err.response.data.message : err.message);
             setLoading(false);
         }
-    };
+    }, [setProducts, setLoading, setError]);
 
     useEffect(() => {
         if (userInfo && userInfo.isAdmin) {
@@ -29,7 +31,7 @@ const ProductListPage = () => {
         } else {
             navigate('/login');
         }
-    }, [userInfo, navigate]);
+    }, [userInfo, navigate, fetchProducts]);
 
     const deleteHandler = async (id) => {
         if (window.confirm('Are you sure you want to delete this product?')) {
@@ -63,53 +65,50 @@ const ProductListPage = () => {
     };
 
     return (
-        <div className="container" style={{ padding: '2rem 20px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h1>Products</h1>
-                <button
-                    onClick={createProductHandler}
-                    style={{ padding: '10px 20px', backgroundColor: '#000', color: '#fff', border: 'none', cursor: 'pointer' }}
-                >
-                    + CREATE PRODUCT
+        <div className="admin-container">
+            <h1 className="mb-4">Admin Dashboard</h1>
+            <AdminNav />
+
+            <div className="admin-header">
+                <h2>Product Inventory</h2>
+                <button onClick={createProductHandler} className="btn">
+                    <FaPlus style={{ marginRight: '8px' }} /> Create Product
                 </button>
             </div>
 
-            {message && <p style={{ color: 'green' }}>{message}</p>}
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {message && <div className="status-badge status-success mb-2">{message}</div>}
+            {error && <div className="status-badge status-danger mb-2">{error}</div>}
 
             {loading ? (
-                <p>Loading...</p>
+                <p>Loading products...</p>
             ) : (
-                <div style={{ overflowX: 'auto' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '1rem' }}>
+                <div className="admin-table-wrapper">
+                    <table className="admin-table">
                         <thead>
-                            <tr style={{ borderBottom: '1px solid #ddd', textAlign: 'left' }}>
-                                <th style={{ padding: '12px' }}>ID</th>
-                                <th style={{ padding: '12px' }}>NAME</th>
-                                <th style={{ padding: '12px' }}>PRICE</th>
-                                <th style={{ padding: '12px' }}>CATEGORY</th>
-                                <th style={{ padding: '12px' }}>ACTIONS</th>
+                            <tr>
+                                <th>ID</th>
+                                <th>NAME</th>
+                                <th>PRICE</th>
+                                <th>CATEGORY</th>
+                                <th>ACTIONS</th>
                             </tr>
                         </thead>
                         <tbody>
                             {products.map((product) => (
-                                <tr key={product._id} style={{ borderBottom: '1px solid #eee' }}>
-                                    <td style={{ padding: '12px' }}>{product._id}</td>
-                                    <td style={{ padding: '12px' }}>{product.name}</td>
-                                    <td style={{ padding: '12px' }}>${product.price}</td>
-                                    <td style={{ padding: '12px' }}>{product.category}</td>
-                                    <td style={{ padding: '12px' }}>
-                                        <button
-                                            onClick={() => navigate(`/admin/product/${product._id}/edit`)}
-                                            style={{ marginRight: '10px', padding: '5px 10px', cursor: 'pointer' }}
-                                        >
-                                            Edit
-                                        </button>
+                                <tr key={product._id}>
+                                    <td>{product._id.substring(0, 10)}...</td>
+                                    <td style={{ fontWeight: '500' }}>{product.name}</td>
+                                    <td>${product.price}</td>
+                                    <td>{product.category}</td>
+                                    <td>
+                                        <Link to={`/admin/product/${product._id}/edit`} className="action-btn">
+                                            <FaEdit />
+                                        </Link>
                                         <button
                                             onClick={() => deleteHandler(product._id)}
-                                            style={{ padding: '5px 10px', color: 'red', cursor: 'pointer' }}
+                                            className="action-btn delete"
                                         >
-                                            Delete
+                                            <FaTrash />
                                         </button>
                                     </td>
                                 </tr>

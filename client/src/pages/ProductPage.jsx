@@ -40,46 +40,40 @@ const ProductPage = () => {
         navigate('/cart');
     };
 
-    if (loading) return <div className="container" style={{ padding: 'var(--spacing-2xl) 0' }}>Loading...</div>;
+    if (loading) return <div className="container" style={{ padding: '4rem 2rem', textAlign: 'center' }}>Loading product details...</div>;
 
     return (
-        <div className="container" style={{ padding: 'var(--spacing-2xl) var(--spacing-xl)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'var(--spacing-2xl)' }}>
+        <div className="product-page-container">
             {/* Product Images (Left) */}
-            <div className="product-images">
-                <img src={product.image} alt={product.name} style={{ width: '100%', borderRadius: 'var(--radius-md)', marginBottom: 'var(--spacing-md)' }} />
+            <div className="product-images-col">
+                <div className="antigravity-float">
+                    <img src={product.image} alt={product.name} className="product-image-main" />
+                </div>
                 {/* Simulated additional images */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--spacing-sm)' }}>
-                    <img src={product.image} alt="detail" style={{ width: '100%', borderRadius: 'var(--radius-sm)' }} />
-                    <img src={product.image} alt="detail" style={{ width: '100%', borderRadius: 'var(--radius-sm)' }} />
+                <div className="product-image-grid">
+                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1800&auto=format&fit=crop" alt="detail" className="product-image-main" />
+                    <img src="https://images.unsplash.com/photo-1551488852-080175b22596?q=80&w=1500&auto=format&fit=crop" alt="detail" className="product-image-main" />
                 </div>
             </div>
 
             {/* Product Details (Right) */}
-            <div className="product-details">
-                <h1 style={{ fontSize: '2rem', marginBottom: 'var(--spacing-xs)' }}>{product.name}</h1>
-                <div style={{ fontSize: '1rem', fontWeight: '500', marginBottom: 'var(--spacing-md)' }}>Men's Shoes</div>
+            <div className="product-details-col">
+                <h1 className="product-title">{product.name}</h1>
+                <div className="product-subtitle">Premium Collection</div>
 
-                <h2 style={{ fontSize: '1.25rem', marginBottom: 'var(--spacing-lg)', fontWeight: '500' }}>${product.price}</h2>
+                <div className="product-price">${product.price}</div>
 
-                <p style={{ marginBottom: 'var(--spacing-xl)', lineHeight: '1.7', color: 'var(--color-gray-800)' }}>{product.description}</p>
+                <p className="product-description">{product.description}</p>
 
                 {product.sizes && product.sizes.length > 0 && (
-                    <div style={{ marginBottom: 'var(--spacing-xl)' }}>
-                        <h4 style={{ marginBottom: 'var(--spacing-sm)', fontSize: '1rem' }}>Select Size</h4>
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--spacing-xs)' }}>
+                    <div className="size-selector">
+                        <h4 style={{ marginBottom: '0.5rem', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Select Size</h4>
+                        <div className="size-grid">
                             {product.sizes.map(size => (
                                 <button
                                     key={size}
                                     onClick={() => setSelectedSize(size)}
-                                    style={{
-                                        padding: '12px',
-                                        background: selectedSize === size ? 'var(--color-black)' : 'transparent',
-                                        color: selectedSize === size ? 'var(--color-white)' : 'var(--color-black)',
-                                        border: '1px solid var(--color-gray-200)',
-                                        borderRadius: 'var(--radius-md)',
-                                        cursor: 'pointer',
-                                        fontWeight: '500'
-                                    }}
+                                    className={`size-btn ${selectedSize === size ? 'selected' : ''}`}
                                 >
                                     {size}
                                 </button>
@@ -88,29 +82,28 @@ const ProductPage = () => {
                     </div>
                 )}
 
-                <div style={{ marginBottom: 'var(--spacing-xl)' }}>
+                <div style={{ marginBottom: '2rem' }}>
                     {product.countInStock > 0 ? (
-                        <button onClick={handleAddToCart} className="btn" style={{ width: '100%', padding: '18px' }}>
-                            Add to Bag
+                        <button onClick={handleAddToCart} className="add-to-cart-btn">
+                            ADD TO BAG
                         </button>
                     ) : (
-                        <button disabled className="btn btn-outline" style={{ width: '100%', padding: '18px', cursor: 'not-allowed', opacity: 0.5 }}>
-                            Out of Stock
+                        <button disabled className="add-to-cart-btn" style={{ opacity: 0.5, cursor: 'not-allowed' }}>
+                            OUT OF STOCK
                         </button>
                     )}
 
-                    <button className="btn btn-outline" style={{ width: '100%', padding: '18px', marginTop: 'var(--spacing-sm)' }}>
+                    <button className="favorite-btn">
                         Favorite <span style={{ marginLeft: '8px' }}>♡</span>
                     </button>
                 </div>
 
-                <div style={{ borderTop: '1px solid var(--color-gray-100)', paddingTop: 'var(--spacing-lg)' }}>
-                    <p style={{ fontSize: '0.9rem', marginBottom: 'var(--spacing-sm)' }}>Free Delivery and Returns</p>
-                    <p style={{ fontSize: '0.9rem', color: 'var(--color-gray-500)' }}>
-                        Reviews functionality coming soon.
+                <div style={{ borderTop: '1px solid var(--color-gray-100)', paddingTop: '1.5rem' }}>
+                    <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem', fontWeight: '500' }}>Free Delivery and Returns</p>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--color-gray-500)', lineHeight: '1.5' }}>
+                        Free standard delivery on all orders. Returns are accepted within 30 days of purchase.
                     </p>
                 </div>
-
             </div>
         </div>
     );

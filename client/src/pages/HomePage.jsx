@@ -32,12 +32,14 @@ const HomePage = () => {
                     className="hero-bg"
                 />
                 <div className="hero-text-container">
-                    <h1 className="hero-title">MAZAHANO <br /><span className="outline-text">STUDIOS</span></h1>
-                    <div className="hero-meta">
+                    <h1 className="hero-title antigravity-float">MAZAHANO <br /><span className="outline-text">STUDIOS</span></h1>
+                    <div className="hero-meta antigravity-float-sm">
                         <p>FALL / WINTER 2026</p>
                         <p>EST. TOKYO</p>
                     </div>
-                    <Link to="/" className="btn-main">EXPLORE COLLECTION</Link>
+                    <div className="antigravity-float-sm" style={{ animationDelay: '1s' }}>
+                        <Link to="/" className="btn-main">EXPLORE COLLECTION</Link>
+                    </div>
                 </div>
             </section>
 

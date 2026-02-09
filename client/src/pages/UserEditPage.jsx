@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { ShopContext } from '../context/ShopContext';
+import { FaArrowLeft } from 'react-icons/fa';
 
 const UserEditPage = () => {
     const { id: userId } = useParams();
@@ -70,16 +71,21 @@ const UserEditPage = () => {
     };
 
     return (
-        <div className="container" style={{ padding: '2rem 20px', maxWidth: '500px' }}>
-            <Link to="/admin/userlist">Go Back</Link>
-            <h1>Edit User</h1>
+        <div className="admin-form-container">
+            <Link to="/admin/userlist" className="back-link">
+                <FaArrowLeft style={{ marginRight: '8px' }} /> GO BACK
+            </Link>
+
+            <h1 className="admin-form-title">Edit User</h1>
+
             {loading ? (
                 <p>Loading...</p>
             ) : error ? (
                 <p style={{ color: 'red' }}>{error}</p>
             ) : (
                 <form onSubmit={submitHandler}>
-                    {updateError && <p style={{ color: 'red' }}>{updateError}</p>}
+                    {updateError && <p style={{ color: 'red', marginBottom: '1rem' }}>{updateError}</p>}
+
                     <div className="form-group">
                         <label className="form-label">Name</label>
                         <input
@@ -89,6 +95,7 @@ const UserEditPage = () => {
                             onChange={(e) => setName(e.target.value)}
                         />
                     </div>
+
                     <div className="form-group">
                         <label className="form-label">Email Address</label>
                         <input
@@ -98,17 +105,20 @@ const UserEditPage = () => {
                             onChange={(e) => setEmail(e.target.value)}
                         />
                     </div>
-                    <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+
+                    <div className="checkbox-group">
                         <input
                             type="checkbox"
                             id="isAdmin"
                             checked={isAdmin}
                             onChange={(e) => setIsAdmin(e.target.checked)}
+                            style={{ width: '20px', height: '20px', cursor: 'pointer' }}
                         />
-                        <label htmlFor="isAdmin">Is Admin</label>
+                        <label htmlFor="isAdmin" style={{ cursor: 'pointer', fontWeight: '500' }}>Is Admin</label>
                     </div>
-                    <button type="submit" className="btn" disabled={updateLoading}>
-                        {updateLoading ? 'UPDATING...' : 'UPDATE'}
+
+                    <button type="submit" className="btn btn-black" style={{ width: '100%' }} disabled={updateLoading}>
+                        {updateLoading ? 'SAVING...' : 'SAVE CHANGES'}
                     </button>
                 </form>
             )}

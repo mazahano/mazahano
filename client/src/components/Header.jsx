@@ -61,8 +61,10 @@ const Header = () => {
                     </Link>
 
                     {userInfo && userInfo.isAdmin && (
-                        <div className="admin-nav" style={{ fontSize: '14px', marginLeft: '10px' }}>
-                            <Link to="/admin/productlist">ADMIN</Link>
+                        <div className="admin-nav-item">
+                            <Link to="/admin/productlist" className="admin-pill-link">
+                                ADMIN DASHBOARD
+                            </Link>
                         </div>
                     )}
                 </div>
