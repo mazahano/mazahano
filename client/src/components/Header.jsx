@@ -42,11 +42,11 @@ const Header = () => {
                 </Link>
 
                 <div className="nav-center">
-                    <Link to="/">New & Featured</Link>
-                    <Link to="/">Men</Link>
-                    <Link to="/">Women</Link>
-                    <Link to="/">Kids</Link>
-                    <Link to="/">Sale</Link>
+                    <Link to="/shop">Shop</Link>
+                    <Link to="/shop?category=men">Men</Link>
+                    <Link to="/shop?category=women">Women</Link>
+                    <Link to="/shop?category=kids">Kids</Link>
+                    <Link to="/shop?category=sale">Sale</Link>
                 </div>
 
                 <div className="nav-icons">

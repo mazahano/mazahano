@@ -32,6 +32,8 @@ function App() {
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/profile" element={<ProfilePage />} />
 
+// Shop Routes
+            <Route path="/shop" element={<ShopPage />} />
             {/* Admin Routes */}
             <Route path="/admin/userlist" element={<UserListPage />} />
             <Route path="/admin/productlist" element={<ProductListPage />} />
