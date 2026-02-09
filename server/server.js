@@ -61,15 +61,24 @@ app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/upload', uploadRoutes);
 
-// Make Uploads Folder Static
+// Make Uploads Folder Static - wrapper for safety in serverless
 const uploadsPath = path.join(__dirname, 'uploads');
-app.use('/uploads', express.static(uploadsPath));
-
-// Ensure uploads directory exists (Basic check)
-const fs = require('fs');
-if (!fs.existsSync(uploadsPath)) {
-  fs.mkdirSync(uploadsPath, { recursive: true });
+const fs = require('fs'); // Moved fs require here as it's used in this block
+try {
+  // Only attempt to create directory if we are NOT in a serverless environment (read-only FS)
+  // Or just try-catch it to be safe.
+  if (!fs.existsSync(uploadsPath)) {
+    fs.mkdirSync(uploadsPath, { recursive: true });
+  }
+  app.use('/uploads', express.static(uploadsPath));
+} catch (error) {
+  console.log('⚠️ Could not create/serve uploads folder (likely serverless environment). This is expected on Vercel.');
 }
+
+// Health Check Route
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', environment: process.env.NODE_ENV, timestamp: new Date() });
+});
 
 const PORT = process.env.PORT || 5000;
 
@@ -83,4 +92,3 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 module.exports = app;
-
