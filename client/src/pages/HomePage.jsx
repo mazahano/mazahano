@@ -38,7 +38,7 @@ const HomePage = () => {
                         <p>EST. TOKYO</p>
                     </div>
                     <div className="antigravity-float-sm" style={{ animationDelay: '1s' }}>
-                        <Link to="/" className="btn-main">EXPLORE COLLECTION</Link>
+                        <Link to="/shop" className="btn-main">EXPLORE COLLECTION</Link>
                     </div>
                 </div>
             </section>
@@ -70,20 +70,20 @@ const HomePage = () => {
             <section className="container mb-4">
                 <h2 className="section-title">THE EDIT</h2>
                 <div className="editorial-grid">
-                    <Link to="/" className="grid-item large">
+                    <Link to="/shop?category=outerwear" className="grid-item large">
                         <img src="https://images.unsplash.com/photo-1512353087810-25dfcd100962?q=80&w=1800&auto=format&fit=crop" alt="Outerwear" />
                         <div className="item-overlay">
                             <h3>OUTERWEAR</h3>
                         </div>
                     </Link>
                     <div className="grid-column">
-                        <Link to="/" className="grid-item small">
+                        <Link to="/shop?category=accessories" className="grid-item small">
                             <img src="https://images.unsplash.com/photo-1551488852-080175b22596?q=80&w=1500&auto=format&fit=crop" alt="Accessories" />
                             <div className="item-overlay">
                                 <h3>ACCESSORIES</h3>
                             </div>
                         </Link>
-                        <Link to="/" className="grid-item small">
+                        <Link to="/shop?category=footwear" className="grid-item small">
                             <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1800&auto=format&fit=crop" alt="Footwear" />
                             <div className="item-overlay">
                                 <h3>FOOTWEAR</h3>
