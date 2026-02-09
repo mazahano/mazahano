@@ -60,6 +60,14 @@ export const ShopProvider = ({ children }) => {
         localStorage.removeItem('userInfo');
     }
 
+    // Global Axios Setup
+    // Use effect to set it once or rely on implicit defaults
+    if (import.meta.env.PROD) {
+        axios.defaults.baseURL = ''; // In production (Vercel), requests go to /api which is rewritten
+    } else {
+        axios.defaults.baseURL = 'http://localhost:5000'; // In dev, we hit the backend explicitly
+    }
+
     return (
         <ShopContext.Provider value={{ cartItems, addToCart, removeFromCart, userInfo, login, logout }}>
             {children}
