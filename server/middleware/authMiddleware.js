@@ -25,6 +25,7 @@ const protect = asyncHandler(async (req, res, next) => {
 });
 
 const admin = (req, res, next) => {
+    console.log('Admin check:', req.user ? req.user.email : 'No User', req.user ? req.user.isAdmin : 'No Admin Field');
     if (req.user && req.user.isAdmin) {
         next();
     } else {

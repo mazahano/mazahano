@@ -20,13 +20,29 @@ app.use(express.json());
 app.use(cors());
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('✅ MongoDB Connected'))
-  .catch(err => {
-    console.error('❌ MongoDB connection error:', err.message);
-    // On Render, we might want to exit if we can't connect to DB on start
-    // but usually, it's better to keep the process alive for health checks
-  });
+// Connect to MongoDB
+let isConnected = false; // Track connection status
+
+const connectDB = async () => {
+  if (isConnected) {
+    console.log('✅ Using existing MongoDB connection');
+    return;
+  }
+
+  try {
+    const conn = await mongoose.connect(process.env.MONGO_URI);
+    isConnected = conn.connections[0].readyState;
+    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.error(`❌ Error: ${error.message}`);
+    process.exit(1);
+  }
+};
+
+// Call connectDB immediately in non-serverless (or rely on route handlers calling it)
+// For Express app, it's okay to call it once here, but in serverless we might want to call it per request if needed.
+// However, to keep it simple and compatible with local server:
+connectDB();
 
 // Basic Route
 app.get('/', (req, res) => {
